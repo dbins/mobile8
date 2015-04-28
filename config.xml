@@ -1,13 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.phonegap.binsmobile" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" xmlns:android= "http://schemas.android.com/apk/res/android">
-    <name>Bins Mobile</name>
+    <name>Rastreio Mobile</name>
     <description>
-       Aplicação de testes Phonegap
+       Teste Rastreio
     </description>
     <author email="bins.br@gmail.com" href="http://www.leandrotonon.com.br/projetos/bins">
         Bins
     </author>
-    <preference name="orientation" value="portrait" /> 
+
+    <preference name="orientation" value="default" /> 
 	<preference name="fullscreen" value="false" />
 	<gap:plugin name="org.apache.cordova.battery-status" />
     <gap:plugin name="org.apache.cordova.camera" />
@@ -27,7 +28,7 @@
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
-	<gap:plugin name="org.apache.cordova.NetworkManager" />
+	
     <icon src="icon.png" />
 	<icon gap:platform="android" gap:qualifier="ldpi" src="res/icon/android/icon-36-ldpi.png" />
     <icon gap:platform="android" gap:qualifier="mdpi" src="res/icon/android/icon-48-mdpi.png" />
