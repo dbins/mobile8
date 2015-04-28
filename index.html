@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, target-densitydpi=medium-dpi" />
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css">
+        <title>Sistema Rastreio</title>
+    </head>
+    <body>
+        <div id="app">
+            <div data-role="page" id="pageone">
+			  <div data-role="header" data-position="fixed">
+				 <div data-role="controlgroup" data-type="horizontal">
+					<a href="#pageone" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+					<a href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left">Menu</a>
+				 </div>
+			  </div>
+
+			  <div data-role="main" id="main" class="ui-content">
+				<p>Sistema de testes Mobile</p>
+				<p>Desenvolvido com Phonegap</p>
+			  </div>
+
+			  <div data-role="footer" data-position="fixed">
+				<h1>Sistema Teste</h1>
+			  </div>
+			</div> 
+			
+			<div data-role="page" id="menu">
+			   
+			  <div data-role="header" data-position="fixed">
+				 <div data-role="controlgroup" data-type="horizontal">
+				 <a href="#pageone" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+				 <a href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left">Menu</a>
+				 </div>
+			  </div>
+
+			  <div data-role="main" id="main" class="ui-content">
+				<a href="#posicao" class="ui-btn">Minha Posição Atual</a>
+				<a href="#rastreio" class="ui-btn">Iniciar Rastreamento</a>
+				<a href="#telefone" class="ui-btn">Info sobre o telefone</a>
+			  </div>
+
+			  <div data-role="footer" data-position="fixed">
+				<h1>Sistema Teste</h1>
+			  </div>
+			</div> 
+
+			
+			<div data-role="page" id="posicao">
+			  <div data-role="header" data-position="fixed">
+				 <div data-role="controlgroup" data-type="horizontal">
+				 <a href="#pageone" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+				 <a href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left">Menu</a>
+				 </div>
+			  </div>
+
+			  <div data-role="main" class="ui-content">
+				<div id="map_canvas" style="width: 300px; height: 300px"></div>
+			  </div>
+
+			  <div data-role="footer">
+				<h1>Posição</h1>
+			  </div>
+			</div> 
+
+
+			<div data-role="page" id="rastreio">
+			  
+			  <div data-role="header" data-position="fixed">
+				 <div data-role="controlgroup" data-type="horizontal">
+					<a href="#pageone" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+					<a href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left">Menu</a>
+				 </div>
+			  </div>
+
+			  <div data-role="main" class="ui-content">
+				  <p>A cada 20 segundos a sua posição será enviada para nosso servidor!</p>
+				  <div id="posicao_atual"></div>
+				  <p>&nbsp;</p>
+				  <button onclick="DesativarRastreio();">Parar rastreio</button>
+			  </div>
+
+			  <div data-role="footer">
+				<h1>Rastreador</h1>
+			  </div>
+			</div> 
+			
+			
+			<div data-role="page" id="telefone">
+			  <div data-role="header" data-position="fixed">
+				 <div data-role="controlgroup" data-type="horizontal">
+				 <a href="#pageone" class="ui-btn ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+				 <a href="#menu" class="ui-btn ui-corner-all ui-shadow ui-btn-icon-left">Menu</a>
+				 </div>
+			  </div>
+
+			  <div data-role="main" class="ui-content">
+				<p>Informações sobre o dispositivo</p>
+				<div id="deviceproperties"></div>
+			  </div>
+
+			  <div data-role="footer">
+				<h1>Dados deste Telefone</h1>
+				
+			  </div>
+			</div>
+			
+        </div>
+		<script type="text/javascript" src="libs/fastclick.min.js"></script>
+		<script type="text/javascript" src="phonegap.js"></script>
+		<script src="js/jquery-1.10.2.min.js"></script>
+		<script src="js/jquery.mobile-1.4.2.min.js"></script>
+		<script src="js/scripts.js"></script>
+    </body>
+</html>
