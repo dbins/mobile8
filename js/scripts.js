@@ -36,6 +36,7 @@
 		var isHighSpeed = false;
 		var status_bateria = "aguarde...";
 		var watchID;
+		var retorno_rastreio = "(nao houve o envio de dados)";
 		
 		// Wait for device API libraries to load
 		// device APIs are available
@@ -163,6 +164,10 @@
 			alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
 		}
 		
+		function ajaxCallBackRASTREIO(retString){
+			retorno_rastreio = retString;
+		}
+		
 		//Funcoes para o rastremanto automatico
 		function onSuccessRastreio(position){
 			alert('estou aqui - onsucessrastreio');
@@ -189,7 +194,7 @@
 			}
 			
 			
-			var retorno = "(nao houve o envio de dados)";
+			
 			$.ajax({
 			type: "POST",
 			url: "http://www.interiornaweb.com.br/rastreio_mobile_teste.php",
@@ -200,27 +205,27 @@
 				alert('1');
 				alert(request.responseText);	
 				alert('1B');
-				retorno = "(Houve um problema de comunicacao com os nossos sistemas)";
+				ajaxCallBackRASTREIO("(Houve um problema de comunicacao com os nossos sistemas)");
 			}
 			}).done(function(data) {
 				//Nao faz nada
 				alert('sucesso!');
 				alert(data);
 				if (data == 1){
-					retorno = "(Dados gravados com sucesso)";
+					ajaxCallBackRASTREIO("(Dados gravados com sucesso)");
 				} else {
-					retorno = "(Houve um problema ao gravar os dados)";
+					ajaxCallBackRASTREIO("(Houve um problema ao gravar os dados)");
 				}
 			});
 			var element = document.getElementById("posicao_atual");
 			element.innerHTML = "Latitude: " + position.coords.latitude + "<br />" +
-			"Longitude: " + position.coords.longitude + "<br />"+ "Altitude: " + var_altitude + "<br />" + "Accuracy:" + var_accuracy + "<br />" + "Altitude Accuracy:" + var_altitude_accuracy + "<br/>" + "Heading: " + var_heading + "<br/>" + "Speed: " + var_speed + "<br />" + retorno + "<hr />";
+			"Longitude: " + position.coords.longitude + "<br />"+ "Altitude: " + var_altitude + "<br />" + "Accuracy:" + var_accuracy + "<br />" + "Altitude Accuracy:" + var_altitude_accuracy + "<br/>" + "Heading: " + var_heading + "<br/>" + "Speed: " + var_speed + "<br />" + retorno_rastreio + "<hr />";
 		}	
 		
 		
 		function DesativarRastreio(){
 			//Habilitar em producao
-			//navigator.geolocation.clearWatch(watchID);
+			navigator.geolocation.clearWatch(watchID);
 			clearTimeout(watchID);
 			$.mobile.changePage("#pageone");			
 		}
