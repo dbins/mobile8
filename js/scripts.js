@@ -34,7 +34,7 @@
 		var isPhoneGapReady = false;
 		var isConnected = false;
 		var isHighSpeed = false;
-		var status_bateria = "";
+		var status_bateria = "aguarde...";
 		var watchID;
 		
 		// Wait for device API libraries to load
@@ -165,7 +165,7 @@
 		
 		//Funcoes para o rastremanto automatico
 		function onSuccessRastreio(position){
-			alert('estou aqui');
+			alert('estou aqui - onsucessrastreio');
 			var var_latitude = position.coords.latitude;
 			var var_longitude = position.coords.longitude;
 			var var_altitude = position.coords.altitude;
@@ -181,11 +181,12 @@
 			data: {latitude: var_latitude, longitude: var_longitude, altitude: var_altitude, accuracy: var_accuracy, altitude_accuracy: var_altitude_accuracy, heading: var_heading, speed: var_speed, gravar: "SIM" },
 			async: true,
 			error: function() {
+				alert('1');
 				retorno = "(Houve um problema de comunicacao com os nossos sistemas)";
 			}
 			}).done(function(data) {
 				//Nao faz nada
-				console.log(data);
+				alert(data);
 				if (data =="1"){
 					retorno = "(Dados gravados com sucesso)";
 				} else {
@@ -212,9 +213,10 @@
 					alert('iniciando...');
 					objeto_position = new Position("43,425397", "-80,442334", 100, 10, 10, 0, 0);
 					console.log(objeto_position);
-					watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
+					//Ambiente de testes
+					//watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
 					//Habilitar em producao
-					//watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 20000 }); //20 segundos
+					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 20000 }); //20 segundos
 					
 					
 					alert('iniciando 1...');
