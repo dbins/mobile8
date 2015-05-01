@@ -69,6 +69,24 @@
 			$("#deviceproperties").append(conteudo);
 		}
 		
+		 // alert dialog dismissed
+		function alertDismissed() {
+			// do something
+		}
+		
+		function formatAMPM() {
+			var date = new Date();
+			var hours = date.getHours();
+			var days = date.getDay(); 
+			var minutes = date.getMinutes();
+			var ampm = hours >= 12 ? 'pm' : 'am';
+			hours = hours % 12;
+			hours = hours ? hours : 12; // the hour '0' should be '12'
+			minutes = minutes < 10 ? '0'+minutes : minutes;
+			var strTime = date + ' ' + hours + ':' + minutes + ' ' + ampm;
+			return strTime;
+		}
+		
 		
 		function networkDetection() {
 			if (isPhoneGapReady) {
@@ -116,11 +134,11 @@
 					fileref.setAttribute("src",	"http://maps.googleapis.com/maps/api/js?sensor=true&callback=" + "getGeolocation");
 					document.getElementsByTagName("head")[0].appendChild(fileref);
 				} else {
-					alert('Não existe conexão com a Internet');
+					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Rastreio Mobile', 'OK');
 					$.mobile.changePage("#pageone");
 				}
 			} else {
-				alert('O aplicativo não está pronto!');
+				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Rastreio Mobile', 'OK');
 				$.mobile.changePage("#pageone");
 			}
 		});
@@ -170,7 +188,7 @@
 		
 		//Funcoes para o rastremanto automatico
 		function onSuccessRastreio(position){
-			alert('estou aqui - onsucessrastreio');
+			
 			var var_latitude = position.coords.latitude;
 			var var_longitude = position.coords.longitude;
 			var var_altitude = position.coords.altitude;
@@ -202,17 +220,18 @@
 			data: {latitude: var_latitude, longitude: var_longitude, altitude: var_altitude, accuracy: var_accuracy, altitude_accuracy: var_altitude_accuracy, heading: var_heading, speed: var_speed, gravar: "SIM" },
 			async: true,
 			error: function(request, status, error) {
-				alert('1');
-				alert(request.responseText);	
-				alert('1B');
+				
+				//alert(request.responseText);	
 				ajaxCallBackRASTREIO("(Houve um problema de comunicacao com os nossos sistemas)");
 			}
 			}).done(function(data) {
 				//Nao faz nada
-				alert('sucesso!');
-				alert(data);
+				
 				if (data == 1){
-					ajaxCallBackRASTREIO("(Dados gravados com sucesso)");
+					ajaxCallBackRASTREIO("(Dados gravados com sucesso - ultima atualizacao:" + formatAMPM + ")");
+					var element = document.getElementById("posicao_atual");
+					element.innerHTML = "Latitude: " + position.coords.latitude + "<br />" +
+					"Longitude: " + position.coords.longitude + "<br />"+ "Altitude: " + var_altitude + "<br />" + "Accuracy:" + var_accuracy + "<br />" + "Altitude Accuracy:" + var_altitude_accuracy + "<br/>" + "Heading: " + var_heading + "<br/>" + "Speed: " + var_speed + "<br />Dados gravados com sucesso - ultima atualizacao:" + formatAMPM + ")<hr />";
 				} else {
 					ajaxCallBackRASTREIO("(Houve um problema ao gravar os dados)");
 				}
@@ -234,7 +253,7 @@
 			if (isPhoneGapReady){
 				if (isConnected) {
 					//rastreando
-					alert('iniciando...');
+					navigator.notification.alert('iniciando o rastreio...', alertDismissed, 'Rastreio Mobile', 'OK');
 					objeto_position = new Position("43,425397", "-80,442334", 100, 10, 10, 0, 0);
 					console.log(objeto_position);
 					//Ambiente de testes
@@ -243,14 +262,14 @@
 					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
 					
 					
-					alert('iniciando 1...');
+					
 					
 				} else {
-					alert('Não existe conexão com a Internet');
+					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Rastreio Mobile', 'OK');
 					$.mobile.changePage("#pageone");
 				}
 			} else {
-				alert('O aplicativo não está pronto!');
+				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Rastreio Mobile', 'OK');
 				$.mobile.changePage("#pageone");
 			}
 		});
