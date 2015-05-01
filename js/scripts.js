@@ -261,11 +261,7 @@
 					//Habilitar em producao
 					//watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
 					
-					watchID = setInterval(function(){
-						navigator.geolocation.getCurrentPosition(onSuccessRastreio, geoError, ,{timeout: 10000, enableHighAccuracy: false});},10000); //10 segundos
-					
-					
-					
+					watchID = setInterval(function(){navigator.geolocation.getCurrentPosition(onSuccessRastreio, geoError, ,{timeout: 10000, enableHighAccuracy: false});},10000); //10 segundos
 					
 				} else {
 					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Rastreio Mobile', 'OK');
