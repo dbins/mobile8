@@ -173,6 +173,22 @@
 			var var_altitude_accuracy = position.coords.altitudeAccuracy;
 			var var_heading = position.coords.heading;
 			var var_speed = position.coords.speed;
+			
+			//Zerando campos que podem vir nulos
+			if(!var_altitude) {
+				var_altitude = 0;
+			}
+			if(!var_altitude_accuracy) {
+				var_altitude_accuracy = 0;
+			}
+			if(!var_heading) {
+				var_heading = 0;
+			}
+			if(!var_speed) {
+				var_speed = 0;
+			}
+			
+			
 			var retorno = "(nao houve o envio de dados)";
 			$.ajax({
 			type: "POST",
@@ -188,8 +204,9 @@
 			}
 			}).done(function(data) {
 				//Nao faz nada
+				alert('sucesso!');
 				alert(data);
-				if (data =="1"){
+				if (data == 1){
 					retorno = "(Dados gravados com sucesso)";
 				} else {
 					retorno = "(Houve um problema ao gravar os dados)";
@@ -218,7 +235,7 @@
 					//Ambiente de testes
 					//watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
 					//Habilitar em producao
-					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 20000 }); //20 segundos
+					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
 					
 					
 					alert('iniciando 1...');
