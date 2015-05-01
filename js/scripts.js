@@ -259,7 +259,10 @@
 					//Ambiente de testes
 					//watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
 					//Habilitar em producao
-					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
+					//watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
+					
+					watchID = setInterval(function(){
+						navigator.geolocation.getCurrentPosition(onSuccessRastreio, geoError, ,{timeout: 10000, enableHighAccuracy: false});},10000); //10 segundos
 					
 					
 					
