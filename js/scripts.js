@@ -179,7 +179,7 @@
 			url: "http://www.interiornaweb.com.br/rastreio_mobile_teste.php",
 			dataType:"text",
 			data: {latitude: var_latitude, longitude: var_longitude, altitude: var_altitude, accuracy: var_accuracy, altitude_accuracy: var_altitude_accuracy, heading: var_heading, speed: var_speed, gravar: "SIM" },
-			async: true,
+			async: false,
 			error: function() {
 				alert('1');
 				retorno = "(Houve um problema de comunicacao com os nossos sistemas)";
@@ -195,7 +195,7 @@
 			});
 			var element = document.getElementById("posicao_atual");
 			element.innerHTML = "Latitude: " + position.coords.latitude + "<br />" +
-			"Longitude: " + position.coords.longitude + "<br />" + retorno + "<hr />";
+			"Longitude: " + position.coords.longitude + "<br />"+ "altitude: " + var_altitude + "<br />" + "accuracy:" + var_accuracy + "<br />" + "altitude accuracy:" + var_altitude_accuracy + "<br/>" + "heading: " + var_heading + "<br/>" + "speed" + var_speed + "<br />" + retorno + "<hr />";
 		}	
 		
 		
