@@ -23,6 +23,56 @@
 			}
 		}
 		
+		function echeck(str) {
+			var at="@"
+			var dot="."
+			var lat=str.indexOf(at)
+			var lstr=str.length
+			var ldot=str.indexOf(dot)
+			if (str.indexOf(at)==-1){
+			   //alert("Invalid E-mail ID")
+			   return false
+			}
+
+			if (str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr){
+			   //alert("Invalid E-mail ID")
+			   return false
+			}
+
+			if (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr){
+				//alert("Invalid E-mail ID")
+				return false
+			}
+
+			 if (str.indexOf(at,(lat+1))!=-1){
+				//alert("Invalid E-mail ID")
+				return false
+			 }
+
+			 if (str.substring(lat-1,lat)==dot || str.substring(lat+1,lat+2)==dot){
+				//alert("Invalid E-mail ID")
+				return false
+			 }
+
+			 if (str.indexOf(dot,(lat+2))==-1){
+				//alert("Invalid E-mail ID")
+				return false
+			 }
+			
+			 if (str.indexOf(" ")!=-1){
+				//alert("Invalid E-mail ID")
+				return false
+			 }
+
+			 return true					
+		}
+		
+		function rand(min,max,interval)	{
+			if (typeof(interval)==='undefined') interval = 1;
+			var r = Math.floor(Math.random()*(max-min+interval)/interval);
+			return r*interval+min;
+		}
+		
 		
 		
 		//Funcoes especificas do Phonegap
@@ -37,6 +87,10 @@
 		var status_bateria = "aguarde...";
 		var watchID;
 		var retorno_rastreio = "(nao houve o envio de dados)";
+		
+		//Variaveis da aplicacao
+		var email_aplicativo;
+		var var_chave;
 		
 		// Wait for device API libraries to load
 		// device APIs are available
@@ -217,7 +271,7 @@
 			type: "POST",
 			url: "http://www.interiornaweb.com.br/rastreio_mobile_teste.php",
 			dataType:"text",
-			data: {latitude: var_latitude, longitude: var_longitude, altitude: var_altitude, accuracy: var_accuracy, altitude_accuracy: var_altitude_accuracy, heading: var_heading, speed: var_speed, gravar: "SIM" },
+			data: {latitude: var_latitude, longitude: var_longitude, altitude: var_altitude, accuracy: var_accuracy, altitude_accuracy: var_altitude_accuracy, heading: var_heading, speed: var_speed, gravar: "SIM", chave: var_chave, email: email_aplicativo},
 			async: true,
 			error: function(request, status, error) {
 				
@@ -246,6 +300,24 @@
 			//Habilitar em producao
 			navigator.geolocation.clearWatch(watchID);
 			clearTimeout(watchID);
+			
+			//Mandar por e-mail o resultado
+			$.ajax({
+			type: "POST",
+			url: "http://www.interiornaweb.com.br/rastreio_mobile_teste_email.php",
+			dataType:"text",
+			data: {gravar: "SIM", chave: var_chave, email: email_aplicativo},
+			async: true,
+			error: function(request, status, error) {
+				
+				//alert(request.responseText);	
+				ajaxCallBackRASTREIO("(Houve um problema de comunicacao com os nossos sistemas)");
+			}
+			}).done(function(data) {
+				//Nao faz nada
+			});
+			
+			
 			$.mobile.changePage("#pageone");			
 		}
 		
@@ -271,6 +343,36 @@
 				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Rastreio Mobile', 'OK');
 				$.mobile.changePage("#pageone");
 			}
+		});
+		
+		$(document).on('pageinit', '#pageone', function(){ 
+		
+			var_chave = rand(1000,9999,1);
+		
+			$(document).on('click', '#enviar_contato', function() { // catch the form's submit event
+			
+				var continuar = true;
+				var mensagem ="Ocorreram os seguintes erros:\n";
+				
+				if ($('#email_contato').val() == "") {
+					mensagem = mensagem +  'Digite o endereco de e-mail\n';
+					continuar = false;
+				} else {
+					if (echeck($('#email_contato').val())==false){
+					mensagem = mensagem + 'Preencha corretamente o endereco de e-mail\n';
+					continuar = false;
+					}
+				}
+
+				if (continuar){
+					email_aplicativo = $('#email_contato').val();
+					$.mobile.changePage("#posicao");
+				} else {
+					alert(mensagem);
+				}
+				return false; // cancel original event to prevent form submitting
+		 
+			});
 		});
 		
 		

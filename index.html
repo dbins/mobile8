@@ -17,12 +17,24 @@
 			  </div>
 
 			  <div data-role="main" id="main" class="ui-content">
-				<p>Sistema de testes Mobile</p>
-				<p>Desenvolvido com Phonegap</p>
+				<p>Sistema de Rastreamento</p>
+				<p><img src="img/tracking_icon.png"></p>
+				<p>&nbsp;</p>
+				<form id="check-contato" data-ajax="false">
+				  <div class="ui-field-contain">
+					     
+					<label for="email">Seu e-mail:</label>
+					<p>&nbsp;</p>
+					<input type="email" name="email_contato" id="email_contato" placeholder="Seu email..">
+					
+				  </div>
+				  <input type="submit" data-inline="true" id="enviar_contato" value="Enviar">
+				</form>
+				
 			  </div>
 
 			  <div data-role="footer" data-position="fixed">
-				<h1>Sistema Teste</h1>
+				<h1>Rastreio</h1>
 			  </div>
 			</div> 
 			
@@ -37,7 +49,6 @@
 
 			  <div data-role="main" id="main" class="ui-content">
 				<a href="#posicao" class="ui-btn">Minha Posição Atual</a>
-				<a href="#rastreio" class="ui-btn">Iniciar Rastreamento</a>
 				<a href="#telefone" class="ui-btn">Info sobre o aparelho</a>
 			  </div>
 
@@ -75,7 +86,7 @@
 			  </div>
 
 			  <div data-role="main" class="ui-content">
-				  <p>A cada 10 segundos a sua posição será enviada para nosso servidor!</p>
+				  <p>Se você estiver em movimento, a cada 10 segundos sua posição será enviada para nosso servidor!</p>
 				  <div id="posicao_atual"></div>
 				  <p>&nbsp;</p>
 				  <button onclick="DesativarRastreio();">Parar rastreio</button>
