@@ -370,7 +370,7 @@
 
 				if (continuar){
 					email_aplicativo = $('#email_contato').val();
-					$.mobile.changePage("#posicao");
+					$.mobile.changePage("#rastreio");
 				} else {
 					alert(mensagem);
 				}
