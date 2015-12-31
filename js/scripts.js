@@ -372,7 +372,8 @@
 					email_aplicativo = $('#email_contato').val();
 					$.mobile.changePage("#rastreio");
 				} else {
-					alert(mensagem);
+					//alert(mensagem);
+					navigator.notification.alert(mensagem, alertDismissed, 'Rastreio Mobile', 'OK');
 				}
 				return false; // cancel original event to prevent form submitting
 		 
