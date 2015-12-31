@@ -331,7 +331,7 @@
 					//rastreando
 					navigator.notification.alert('iniciando o rastreio...', alertDismissed, 'Rastreio Mobile', 'OK');
 					objeto_position = new Position("43,425397", "-80,442334", 100, 10, 10, 0, 0);
-					console.log(objeto_position);
+					//console.log(objeto_position);
 					//Ambiente de testes
 					//watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
 					//Habilitar em producao
