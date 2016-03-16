@@ -77,6 +77,17 @@
 			return r*interval+min;
 		}
 		
+		function calculateDistance(lat1, lon1, lat2, lon2) {
+		  var R = 6371; // km
+		  var dLat = (lat2 - lat1).toRad();
+		  var dLon = (lon2 - lon1).toRad(); 
+		  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+				  Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+				  Math.sin(dLon / 2) * Math.sin(dLon / 2); 
+		  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+		  var d = R * c;
+		  return d;
+		}
 		
 		
 		//Funcoes especificas do Phonegap
@@ -95,6 +106,15 @@
 		//Variaveis da aplicacao
 		var email_aplicativo;
 		var var_chave;
+		var tipo_conexao = "";
+		var total_interacoes_sucesso = 0;
+		var total_interacoes_erro = 0;
+		var total_interacoes_erro_postar = 0;
+		var latitude_inicial = "";
+		var latitude_atual = "";
+		var longitude_inicial = "";
+		var longitude_atual = "";
+		var distancia = "";
 		
 		// Wait for device API libraries to load
 		// device APIs are available
@@ -153,20 +173,19 @@
 				
 				isConnected = true;
 				isHighSpeed = true;
-				//O codigo abaixo somente funciona no dispositivo
-				//if (navigator.network.connection.type != Connection.NONE) {
-				//	isConnected = true;
-				//}
-				// determine whether this connection is high-speed
-				//switch (navigator.network.connection.type) {
-				//	case Connection.UNKNOWN:
-				//	case Connection.CELL_2G:
-				//	isHighSpeed = false;
-				//	break;
-				//	default:
-				//	isHighSpeed = true;
-				//	break;
-				//}
+				var states = {};
+				states[navigator.connection.UNKNOWN]  = 'Unknown connection';
+				states[navigator.connection.ETHERNET] = 'Ethernet connection';
+				states[navigator.connection.WIFI]     = 'WiFi connection';
+				states[navigator.connection.CELL_2G]  = 'Cell 2G connection';
+				states[navigator.connection.CELL_3G]  = 'Cell 3G connection';
+				states[navigator.connection.CELL_4G]  = 'Cell 4G connection';
+				states[navigator.connection.NONE]     = 'No network connection';
+				tipo_conexao = states[navigator.connection.type];
+				
+				if (tipo_conexao != 'No network connection') {
+					isConnected = true;
+				}
 			}
 		}
 		
@@ -192,10 +211,12 @@
 					fileref.setAttribute("src",	"http://maps.googleapis.com/maps/api/js?sensor=true&callback=" + "getGeolocation");
 					document.getElementsByTagName("head")[0].appendChild(fileref);
 				} else {
+					navigator.vibrate(2000);
 					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Rastreio Mobile', 'OK');
 					$.mobile.changePage("#pageone");
 				}
 			} else {
+				navigator.vibrate(2000);
 				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Rastreio Mobile', 'OK');
 				$.mobile.changePage("#pageone");
 			}
@@ -237,7 +258,17 @@
 		}
 		
 		function geoError(error) {
-			alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
+			//alert('codigo: ' + error.code + '\n' + 'mensagem: ' + error.message + '\n');
+			navigator.vibrate(2000);
+			navigator.notification.alert('Verifique se existe conexao com a Internet, ou se o GPS de seu aparelho esta ativado', alertDismissed, 'Rastreio Mobile', 'OK');
+		}
+		
+		function geoError2(error) {
+			total_interacoes_erro++;
+			var element = document.getElementById("posicao_atual");
+			element.innerHTML = "Verifique se existe conexao com a Internet, ou se o GPS de seu aparelho esta ativado";
+			
+			GerarResumo();
 		}
 		
 		function ajaxCallBackRASTREIO(retString){
@@ -286,17 +317,32 @@
 				//Nao faz nada
 				
 				if (data == 1){
+					total_interacoes_sucesso++;
+					
+					if (total_interacoes_sucesso == 1){
+						latitude_inicial = position.coords.latitude;
+						longitude_inicial = position.coords.longitude;
+					} else {
+						latitude_atual = position.coords.latitude;
+						longitude_atual = position.coords.longitude;
+						distancia = calculateDistance(latitude_inicial, longitude_inicial, latitude_atual, longitude_atual);
+					}	
+						
+					
 					ajaxCallBackRASTREIO("(Dados gravados com sucesso - ultima atualizacao:" + formatAMPM() + ")");
 					var element = document.getElementById("posicao_atual");
 					element.innerHTML = "Latitude: " + position.coords.latitude + "<br />" +
 					"Longitude: " + position.coords.longitude + "<br />"+ "Altitude: " + var_altitude + "<br />" + "Accuracy:" + var_accuracy + "<br />" + "Altitude Accuracy:" + var_altitude_accuracy + "<br/>" + "Heading: " + var_heading + "<br/>" + "Speed: " + var_speed + "<br />Dados gravados com sucesso - ultima atualizacao:" + formatAMPM() + ")<hr />";
 				} else {
+					total_interacoes_erro_postar++;
 					ajaxCallBackRASTREIO("(Houve um problema ao gravar os dados)");
 				}
 			});
 			var element = document.getElementById("posicao_atual");
 			element.innerHTML = "Latitude: " + position.coords.latitude + "<br />" +
 			"Longitude: " + position.coords.longitude + "<br />"+ "Altitude: " + var_altitude + "<br />" + "Accuracy:" + var_accuracy + "<br />" + "Altitude Accuracy:" + var_altitude_accuracy + "<br/>" + "Heading: " + var_heading + "<br/>" + "Speed: " + var_speed + "<br />" + retorno_rastreio + "<hr />";
+			
+			GerarResumo();
 		}	
 		
 		
@@ -321,6 +367,15 @@
 				//Nao faz nada
 			});
 			
+			//Limpar variaveis de controle
+			total_interacoes_sucesso = 0;
+			total_interacoes_erro = 0;
+			total_interacoes_erro_postar = 0;
+			latitude_inicial = "";
+			latitude_atual = "";
+			longitude_inicial = "";
+			longitude_atual = "";
+			distancia = "";
 			
 			$.mobile.changePage("#pageone");			
 		}
@@ -329,19 +384,23 @@
 			if (isPhoneGapReady){
 				if (isConnected) {
 					//rastreando
-					navigator.notification.alert('iniciando o rastreio...', alertDismissed, 'Rastreio Mobile', 'OK');
+					//navigator.notification.alert('iniciando o rastreio...', alertDismissed, 'Rastreio Mobile', 'OK');
+					
+					var element = document.getElementById("posicao_atual");
+					element.innerHTML = "Iniciando o rastreio...";
+					
 					objeto_position = new Position("43,425397", "-80,442334", 100, 10, 10, 0, 0);
 					//console.log(objeto_position);
 					//Ambiente de testes
 					//watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
 					//Habilitar em producao
-					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
+					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError2,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
 					
 					//watchID = setInterval(function(){navigator.geolocation.getCurrentPosition(onSuccessRastreio, geoError, ,{timeout: 10000, enableHighAccuracy: false})},10000); //10 segundos
 					
 				} else {
+					navigator.vibrate(2000);
 					navigator.notification.alert('Não existe conexão com a Internet', alertDismissed, 'Rastreio Mobile', 'OK');
-					$.mobile.changePage("#pageone");
 				}
 			} else {
 				navigator.notification.alert('O aplicativo não está pronto!', alertDismissed, 'Rastreio Mobile', 'OK');
@@ -373,11 +432,27 @@
 					$.mobile.changePage("#rastreio");
 				} else {
 					//alert(mensagem);
+					navigator.vibrate(2000);
 					navigator.notification.alert(mensagem, alertDismissed, 'Rastreio Mobile', 'OK');
 				}
 				return false; // cancel original event to prevent form submitting
 		 
 			});
 		});
+		
+		function GerarResumo(){
+			var element2 = document.getElementById("resumo");
+			var texto_resumo = "<p>Log de Operacoes<br/>Dados enviados com sucesso: " + total_interacoes_sucesso + "<br/>Erros ao obter posicao: " + total_interacoes_erro + "<br/>Erros ao gravar no servidor:" + total_interacoes_erro_postar + "</p>";
+			
+			if (distancia != ""){
+				texto_resumo = texto_resumo + "<p>Distancia percorrida deste o inicio do rastreio:" + distancia + "</p>";
+			}
+			if (tipo_conexao != ""){
+				texto_resumo = texto_resumo + "<p>Tipo de conexao deste aparelho:" + tipo_conexao + "</p>";
+			}
+			element2.innerHTML = texto_resumo;
+			
+		}
+		
 		
 		
