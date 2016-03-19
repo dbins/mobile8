@@ -89,6 +89,9 @@
 		  return d;
 		}
 		
+		function pad(s) { 
+			return (s < 10) ? '0' + s : s; 
+		}
 		
 		//Funcoes especificas do Phonegap
 		
@@ -115,6 +118,7 @@
 		var longitude_inicial = "";
 		var longitude_atual = "";
 		var distancia = "";
+		var ultimo_envio = "";
 		
 		// Wait for device API libraries to load
 		// device APIs are available
@@ -154,6 +158,7 @@
 		
 		function formatAMPM() {
 			var date = new Date();
+			var tmp_data = [pad(date.getDate()), pad(date.getMonth()+1), date.getFullYear()].join('/');
 			var hours = date.getHours();
 			var days = date.getDay(); 
 			var minutes = date.getMinutes();
@@ -161,7 +166,7 @@
 			hours = hours % 12;
 			hours = hours ? hours : 12; // the hour '0' should be '12'
 			minutes = minutes < 10 ? '0'+minutes : minutes;
-			var strTime = date + ' ' + hours + ':' + minutes + ' ' + ampm;
+			var strTime = tmp_data + ' ' + hours + ':' + minutes + ' ' + ampm;
 			return strTime;
 		}
 		
@@ -326,6 +331,7 @@
 						latitude_atual = position.coords.latitude;
 						longitude_atual = position.coords.longitude;
 						distancia = calculateDistance(latitude_inicial, longitude_inicial, latitude_atual, longitude_atual);
+						ultimo_envio = "ultima atualizacao:" + formatAMPM();
 					}	
 						
 					
@@ -442,7 +448,7 @@
 		
 		function GerarResumo(){
 			var element2 = document.getElementById("resumo");
-			var texto_resumo = "<p>Log de Operacoes<br/>Dados enviados com sucesso: " + total_interacoes_sucesso + "<br/>Erros ao obter posicao: " + total_interacoes_erro + "<br/>Erros ao gravar no servidor:" + total_interacoes_erro_postar + "</p>";
+			var texto_resumo = "<p>Log de Operacoes<br/>Dados enviados com sucesso: " + total_interacoes_sucesso + "<br/>Erros ao obter posicao: " + total_interacoes_erro + "<br/>Erros ao gravar no servidor:" + total_interacoes_erro_postar + "</p><p>" + ultimo_envio + "</p>";
 			
 			if (distancia != ""){
 				texto_resumo = texto_resumo + "<p>Distancia percorrida deste o inicio do rastreio:" + distancia + "</p>";
