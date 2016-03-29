@@ -330,8 +330,9 @@
 					} else {
 						latitude_atual = position.coords.latitude;
 						longitude_atual = position.coords.longitude;
-						distancia = calculateDistance(latitude_inicial, longitude_inicial, latitude_atual, longitude_atual);
 						ultimo_envio = "ultima atualizacao:" + formatAMPM();
+						distancia = calculateDistance(latitude_inicial, longitude_inicial, latitude_atual, longitude_atual);
+						
 					}	
 						
 					
@@ -400,7 +401,7 @@
 					//Ambiente de testes
 					//watchID = setInterval(onSuccessRastreio(objeto_position), 3000);
 					//Habilitar em producao
-					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError2,{timeout: 10000, enableHighAccuracy: false, frequency: 10000 }); //10 segundos
+					watchID = navigator.geolocation.watchPosition(onSuccessRastreio, geoError2,{timeout: 10000, enableHighAccuracy: false, frequency: 30000 }); //30 segundos
 					
 					//watchID = setInterval(function(){navigator.geolocation.getCurrentPosition(onSuccessRastreio, geoError, ,{timeout: 10000, enableHighAccuracy: false})},10000); //10 segundos
 					
