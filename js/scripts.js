@@ -309,7 +309,7 @@
 			
 			$.ajax({
 			type: "POST",
-			url: "http://www.interiornaweb.com.br/rastreio_mobile_teste.php",
+			url: "http://www.leandrotonon.com.br/projetos/bins/interior/rastreio_mobile_teste.php",
 			dataType:"text",
 			data: {latitude: var_latitude, longitude: var_longitude, altitude: var_altitude, accuracy: var_accuracy, altitude_accuracy: var_altitude_accuracy, heading: var_heading, speed: var_speed, gravar: "SIM", chave: var_chave, email: email_aplicativo},
 			async: true,
@@ -361,7 +361,7 @@
 			//Mandar por e-mail o resultado
 			$.ajax({
 			type: "POST",
-			url: "http://www.interiornaweb.com.br/rastreio_mobile_teste_email.php",
+			url: "http://www.leandrotonon.com.br/projetos/bins/interior/rastreio_mobile_teste_email.php",
 			dataType:"text",
 			data: {gravar: "SIM", chave: var_chave, email: email_aplicativo},
 			async: true,
