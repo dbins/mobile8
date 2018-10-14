@@ -213,7 +213,7 @@
 					// load the google api
 					var fileref=document.createElement('script');
 					fileref.setAttribute("type","text/javascript");
-					fileref.setAttribute("src",	"http://maps.googleapis.com/maps/api/js?sensor=true&callback=" + "getGeolocation");
+					fileref.setAttribute("src",	"http://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyB-dudx6w0oDbDuAcrcMUEmD-cVc5fHVmE&callback=" + "getGeolocation");
 					document.getElementsByTagName("head")[0].appendChild(fileref);
 				} else {
 					navigator.vibrate(2000);
